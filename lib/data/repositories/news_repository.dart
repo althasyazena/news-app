@@ -1,3 +1,4 @@
+
 import 'package:news_app/core/constants/news_category.dart';
 
 import '../models/article.dart';
@@ -11,14 +12,24 @@ import '../services/news_api_service.dart';
 
 class NewsRepository {
   NewsRepository(this._apiService);
-  
+
   final NewsApiService _apiService;
 
   Future<List<Article>> getTopHeadlines(NewsCategory category) async {
-    return _apiService.fetchTopHeadlines(category.apiValue);
+    final articles = await _apiService.fetchTopHeadlines(category.apiValue);
+    return articles.toSet().toList();
   }
 
   Future<List<Article>> searchArticles(String query) async {
-    return _apiService.searchArticles(query);
+    final articles = await _apiService.searchArticles(query);
+    return articles.toSet().toList();
+  }
+
+  // Mengambil berita berdasarkan kategori STEMSpace
+  Future<List<Article>> getStemArticles(StemCategory category) async {
+    final articles =
+        await _apiService.fetchArticlesByStemCategory(category);
+
+    return articles.toSet().toList();
   }
 }

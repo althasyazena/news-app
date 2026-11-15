@@ -27,6 +27,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
     # Berisi API key. File ini di-ignore oleh git (lihat .env.example).
     - .env
 
@@ -41,10 +42,10 @@ flutter_launcher_icons:
 
 # Splash screen native → jalankan: dart run flutter_native_splash:create
 flutter_native_splash:
-  color: "#1F5FA8"
+  color: "#080E1B"
   image: assets/logo/splash_logo.png
   android_12:
-    color: "#1F5FA8"
+    color: "#080E1B"
     image: assets/logo/splash_logo_android12.png
-    icon_background_color: "#1F5FA8"
+    icon_background_color: "#080E1B"
   fullscreen: false

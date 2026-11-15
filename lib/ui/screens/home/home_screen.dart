@@ -1,26 +1,38 @@
+
 import 'package:flutter/material.dart';
 
 import 'widgets/category_chips.dart';
 import 'widgets/headlines_section.dart';
 import 'widgets/home_app_bar.dart';
+import 'widgets/welcome_banner.dart';
 
-/// TODO: Ubah HomeScreen menjadi ConsumerWidget
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   Future<void> _refresh() async {
-    // TODO: Refresh provider saat pull-to-refresh
+    // TODO: Refresh provider
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _refresh,
-      child: const CustomScrollView(
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          HomeAppBar(),
-          SliverToBoxAdapter(child: CategoryChips()),
-          HeadlinesSection(),
+          const HomeAppBar(),
+
+          const SliverToBoxAdapter(
+            child: WelcomeBanner(),
+          ),
+
+          // SEARCH WIDGET AKAN DILETAKKAN DI SINI
+
+          const SliverToBoxAdapter(
+            child: CategoryChips(),
+          ),
+
+          const HeadlinesSection(),
         ],
       ),
     );

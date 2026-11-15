@@ -1,6 +1,7 @@
+
 import 'package:flutter/material.dart';
 
-/// Skeleton loading berdenyut yang meniru bentuk [ArticleTile].
+/// Skeleton loading untuk artikel STEMSpace.
 class LoadingSkeleton extends StatefulWidget {
   const LoadingSkeleton({super.key, this.itemCount = 6});
 
@@ -14,11 +15,11 @@ class _LoadingSkeletonState extends State<LoadingSkeleton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 900),
+    duration: const Duration(milliseconds: 1000),
   )..repeat(reverse: true);
 
   late final Animation<double> _opacity = _controller.drive(
-    Tween(begin: 0.45, end: 1.0),
+    Tween(begin: 0.5, end: 1.0),
   );
 
   @override
@@ -32,7 +33,10 @@ class _LoadingSkeletonState extends State<LoadingSkeleton>
     return FadeTransition(
       opacity: _opacity,
       child: Column(
-        children: List.generate(widget.itemCount, (_) => const _SkeletonTile()),
+        children: List.generate(
+          widget.itemCount,
+          (_) => const _SkeletonTile(),
+        ),
       ),
     );
   }
@@ -43,24 +47,48 @@ class _SkeletonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
+    final scheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+        vertical: 14,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _Bar(width: 80, height: 10),
-                SizedBox(height: 10),
-                _Bar(height: 14),
-                SizedBox(height: 6),
-                _Bar(width: 180, height: 14),
-              ],
-            ),
+          Row(
+            children: [
+              _Bar(width: 65, height: 9),
+              const SizedBox(width: 8),
+              _Bar(width: 45, height: 9),
+            ],
           ),
-          SizedBox(width: 16),
-          _Bar(width: 92, height: 92, radius: 12),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    _Bar(height: 14),
+                    SizedBox(height: 7),
+                    _Bar(width: 170, height: 14),
+                    SizedBox(height: 13),
+                    _Bar(width: 90, height: 9),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 15),
+              const _Bar(width: 88, height: 88, radius: 10),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Divider(
+            height: 1,
+            color: scheme.outlineVariant.withOpacity(0.35),
+          ),
         ],
       ),
     );
@@ -71,7 +99,7 @@ class _Bar extends StatelessWidget {
   const _Bar({
     this.width = double.infinity,
     required this.height,
-    this.radius = 6,
+    this.radius = 5,
   });
 
   final double width;

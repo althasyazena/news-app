@@ -1,36 +1,30 @@
-// import '../data/models/article.dart';
 
-// TODO 8: Implementasi HeadlinesProvider
-// 1. Buat class HeadlinesNotifier extends AsyncNotifier<List<Article>>
-// 2. Di dalam build(), panggil NewsRepository.getTopHeadlines()
-// 3. Buat fungsi fetchHeadlines(String category) untuk memuat ulang data dengan kategori berbeda
-// 4. Buat headlinesProvider (AsyncNotifierProvider) untuk digunakan di UI
-
-// kategori yang sedang dipilih halaman beranda
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/core/constants/news_category.dart';
 import 'package:news_app/data/models/article.dart';
 import 'package:news_app/data/repositories/news_repository.dart';
 import 'package:news_app/providers/dependency_provider.dart';
 
-class SelectedCategoryNotifier extends Notifier<NewsCategory>{
+class SelectedCategoryNotifier extends Notifier<StemCategory> {
   @override
-  NewsCategory build() => NewsCategory.general;
+  StemCategory build() => StemCategory.science;
 
-  void select(NewsCategory category) => state = category;
+  void select(StemCategory category) {
+    state = category;
+  }
 }
 
-final SelectedCategoryProvider = NotifierProvider<SelectedCategoryNotifier, NewsCategory>(
-  SelectedCategoryNotifier.new
+final SelectedCategoryProvider =
+    NotifierProvider<SelectedCategoryNotifier, StemCategory>(
+  SelectedCategoryNotifier.new,
 );
 
-// Top Headline per-kategori
-/**
- * Memakai `.family` sehingga hasil setiap kategori di-cache saat user kembali ke kategori yang sama, 
- * data akan langsung tampil tanpa request ulang (tanpa GET API)
- * family, mempersingkat waktu, jd gausah GET ulang
- */
-
-final headlinesProvider = FutureProvider.family<List<Article>, NewsCategory>((ref, category) {
-  return ref.watch(newsRepositoryProvider).getTopHeadlines(category);
-});
+// Mengambil berita berdasarkan kategori STEMSpace
+final headlinesProvider =
+    FutureProvider.family<List<Article>, StemCategory>(
+  (ref, category) {
+    return ref
+        .watch(newsRepositoryProvider)
+        .getStemArticles(category);
+  },
+);

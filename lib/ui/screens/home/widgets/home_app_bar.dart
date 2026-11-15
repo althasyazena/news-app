@@ -27,20 +27,42 @@ class HomeAppBar extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text('Warta', style: theme.textTheme.headlineMedium),
+          RichText(
+            text: TextSpan(
+              style: theme.textTheme.headlineMedium,
+              children: [
+                TextSpan(
+                  text: 'S',
+                  style: TextStyle(color: Color(0xFFFFFF00)), // Yellow
+                ),
+                TextSpan(
+                  text: 'T',
+                  style: TextStyle(color: Color(0xFF0015FF)), // Blue
+                ),
+                TextSpan(
+                  text: 'E',
+                  style: TextStyle(color: Color(0xFF03CB08)), // Green
+                ),
+                TextSpan(
+                  text: 'M',
+                  style: TextStyle(color: Color(0xFFFF0000)), // Red
+                ),
+                TextSpan(
+                  text: ' Space',
+                  style: TextStyle(
+                    color: theme.brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
-      actions: [
-        const ThemeToggleButton(),
-        IconButton(
-          tooltip: 'Cari berita',
-          icon: const Icon(Icons.search_rounded),
-          onPressed: () {
-            // TODO: Gunakan ref.read(navigationProvider) untuk pindah ke tab search
-            ref.read(navigationProvider.notifier).select(1); // karna berdasarkan index, searchscreen ada di index 1
-          },
-        ),
-        const SizedBox(width: 8),
+      actions: const [
+        ThemeToggleButton(),
+        SizedBox(width: 16),
       ],
     );
   }

@@ -1,18 +1,23 @@
-/// Kategori berita yang didukung oleh endpoint top-headlines NewsAPI.
+
 enum NewsCategory {
-  general('Utama'),
-  business('Bisnis'),
-  technology('Teknologi'),
-  science('Sains'),
-  health('Kesehatan'),
-  sports('Olahraga'),
-  entertainment('Hiburan');
+  science('Science'),
+  technology('Technology');
 
   const NewsCategory(this.label);
 
-  /// Label yang ditampilkan di UI.
   final String label;
 
-  /// Nilai yang dikirim ke API.
   String get apiValue => name;
+}
+
+enum StemCategory {
+  science('Science', NewsCategory.science),
+  technology('Technology', NewsCategory.technology),
+  engineering('Engineering', NewsCategory.technology),
+  mathematics('Mathematics', NewsCategory.science);
+
+  const StemCategory(this.label, this.apiCategory);
+
+  final String label;
+  final NewsCategory apiCategory;
 }

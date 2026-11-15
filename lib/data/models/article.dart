@@ -1,3 +1,6 @@
+
+import 'package:news_app/core/constants/news_category.dart';
+
 // TODO 1: Buat class Article
 // 1. Buat class dengan properti: title, sourceName, author, description, url, imageUrl, publishedAt, content
 // 2. Buat factory constructor `fromJson(Map<String, dynamic> json)`
@@ -15,6 +18,7 @@ class Article {
     this.description,
     this.imageUrl,
     this.content,
+    this.category,
   });
 
   final String title;
@@ -25,6 +29,7 @@ class Article {
   final String? description;
   final String? imageUrl;
   final String? content;
+  final StemCategory? category;
 
   // TODO: Implementasi cleanContent
   String get cleanContent => (content ?? '').replaceAll(RegExp(r'\s*\[\+\d+ chars\]$'), '').trim();
@@ -41,24 +46,29 @@ class Article {
 
   // mengubah data JSON dari API menjadi object article, supaya datanya bisa digunakan di flutter
   // Implementasi fromJson. untuk dikonversi menjadi bahasa Dart (bukan raw JSON)
-  factory Article.fromJson(Map<String, dynamic> json) {
+  factory Article.fromJson(
+    Map<String, dynamic> json, {
+    StemCategory? category,
+  }) {
     final source = json['source'] as Map<String, dynamic>?;
+
     return Article(
-      title: json['title'] as String? ?? '', 
-      sourceName: source?['name'] as String? ?? 'Tanpa Sumber', 
-      url: json['url'] as String? ?? '', 
+      title: json['title'] as String? ?? '',
+      sourceName: source?['name'] as String? ?? 'Tanpa Sumber',
+      url: json['url'] as String? ?? '',
       publishedAt: DateTime.tryParse(json['publishedAt'] as String? ?? ''),
       author: json['author'] as String?,
       description: json['description'] as String?,
       imageUrl: json['urlToImage'] as String?,
       content: json['content'] as String?,
+      category: category,
     );
   }
 
-  // mengubah object article menjadi Map/JSON, supaya bisa disimpan atau dikirim kembali
+  // mengubah object artikel menjadi Map/JSON, supaya bisa disimpan atau dikirim kembali
   // Implementasi toJson, untuk verifikasi
   Map<String, dynamic> toJson() => {
-    'title': title, 
+    'title': title,
     'source': {'name': sourceName},
     'url': url,
     'publishedAt': publishedAt?.toIso8601String(),
@@ -66,6 +76,7 @@ class Article {
     'description': description,
     'urlToImage': imageUrl,
     'content': content,
+    'category': category?.name,
   };
 
   // Dummy article untuk UI sementara
@@ -77,5 +88,6 @@ class Article {
     description: 'Ini adalah deskripsi berita sementara sebelum API disambungkan.',
     imageUrl: 'https://picsum.photos/400/200',
     content: 'Isi konten berita yang lebih panjang akan muncul di sini.',
+    category: StemCategory.science,
   );
 }

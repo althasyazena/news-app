@@ -1,8 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/providers/search_provider.dart';
 
-/// TODO: Ubah SearchInput menjadi ConsumerStatefulWidget
 class SearchInput extends ConsumerStatefulWidget {
   const SearchInput({super.key});
 
@@ -19,7 +19,6 @@ class _SearchInputState extends ConsumerState<SearchInput> {
     super.dispose();
   }
 
-  // membersihkan pencarian sebelumnya
   void _clear() {
     _controller.clear();
     ref.read(SearchQueryProvider.notifier).clear();
@@ -27,40 +26,67 @@ class _SearchInputState extends ConsumerState<SearchInput> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Dengarkan perubahan searchQueryProvider dari luar (misal: saat klik topik rekomendasi)
-    ref.listen(SearchQueryProvider, (_, next) {
-      if (_controller.text != next) _controller.text = next;
-      _controller.selection = TextSelection.fromPosition(
-        TextPosition(offset: _controller.text.length)
-      );
-    });
-    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return SearchBar(
-      controller: _controller,
-      hintText: 'Cari berita, topik, atau tokoh',
-      elevation: const WidgetStatePropertyAll(0),
-      backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHigh),
-      padding: const WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 16),
-      ),
-      leading: const Icon(Icons.search_rounded),
-      textInputAction: TextInputAction.search,
-      onSubmitted: (value) {
-        ref.read(SearchQueryProvider.notifier).submit(value);
-      },
-      trailing: [
-        ListenableBuilder(
-          listenable: _controller,
-          builder: (_, _) => _controller.text.isEmpty
-              ? const SizedBox.shrink()
-              : IconButton(
-                  tooltip: 'Hapus',
-                  icon: const Icon(Icons.close_rounded),
-                  onPressed: _clear,
-                ),
+    ref.listen(SearchQueryProvider, (_, next) {
+      if (_controller.text != next) {
+        _controller.text = next;
+        _controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: _controller.text.length),
+        );
+      }
+    });
+
+    return SizedBox(
+      height: 60,
+      child: SearchBar(
+        controller: _controller,
+        hintText: 'Search articles...',
+        elevation: const WidgetStatePropertyAll(0),
+        backgroundColor: WidgetStatePropertyAll(
+          isDark
+              ? const Color(0xFF252538)
+              : const Color(0xFFF2F2FA),
         ),
-      ],
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 18),
+        ),
+        hintStyle: const WidgetStatePropertyAll(
+          TextStyle(
+            color: Color(0xFF9292A2),
+            fontSize: 16,
+          ),
+        ),
+        textStyle: WidgetStatePropertyAll(
+          TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 15,
+          ),
+        ),
+        leading: const Icon(
+          Icons.search_rounded,
+          color: Color(0xFF646477),
+          size: 27,
+        ),
+        shape: const WidgetStatePropertyAll(
+          StadiumBorder(),
+        ),
+        textInputAction: TextInputAction.search,
+        onSubmitted: (value) {
+          ref.read(SearchQueryProvider.notifier).submit(value);
+        },
+        trailing: [
+          ListenableBuilder(
+            listenable: _controller,
+            builder: (_, _) => _controller.text.isEmpty
+                ? const SizedBox.shrink()
+                : IconButton(
+                    icon: const Icon(Icons.close_rounded),
+                    onPressed: _clear,
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

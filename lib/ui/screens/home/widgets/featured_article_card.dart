@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/router/app_router.dart';
@@ -5,58 +6,113 @@ import '../../../../core/utils/date_formatter.dart';
 import '../../../../data/models/article.dart';
 import '../../../widgets/article_image.dart';
 import '../../../widgets/bookmark_button.dart';
-import '../../../widgets/source_label.dart';
 
-/// Kartu besar untuk berita utama (artikel pertama).
 class FeaturedArticleCard extends StatelessWidget {
-  const FeaturedArticleCard({super.key, required this.article});
+  const FeaturedArticleCard({
+    super.key,
+    required this.article,
+  });
 
   final Article article;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final description = article.description;
 
-    return InkWell(
-      onTap: () => AppRouter.openArticle(context, article),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: ArticleImage(url: article.imageUrl, radius: 20),
-            ),
-            const SizedBox(height: 14),
-            SourceLabel(name: article.sourceName),
-            const SizedBox(height: 6),
-            Text(article.title, style: theme.textTheme.titleLarge),
-            if (description != null && description.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-            Row(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () => AppRouter.openArticle(context, article),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                Text(
-                  DateFormatter.relative(article.publishedAt),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                ArticleImage(
+                  url: article.imageUrl,
+                  radius: 0,
+                ),
+
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Color(0xDD000000),
+                      ],
+                      stops: [0.35, 1.0],
+                    ),
                   ),
                 ),
-                const Spacer(),
-                BookmarkButton(article: article),
+
+                Positioned(
+                  left: 20,
+                  right: 55,
+                  bottom: 16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFF00),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          article.sourceName,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        article.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      Text(
+                        DateFormatter.relative(article.publishedAt),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Positioned(
+                  right: 12,
+                  bottom: 10,
+                  child: BookmarkButton(
+                    article: article,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

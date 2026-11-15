@@ -10,7 +10,7 @@ class NavigationNotifier extends Notifier<int> {
   @override
   int build() => 0;
 
-  void select(int index) => state - index;
+  void select(int index) => state = index;
 }
 
 final navigationProvider = NotifierProvider<NavigationNotifier, int>(

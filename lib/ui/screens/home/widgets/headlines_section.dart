@@ -16,19 +16,31 @@ class HeadlinesSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final category = ref.watch(SelectedCategoryProvider);
-    final headlines = ref.watch(headlinesProvider(category));
+    final selectedCategory = ref.watch(SelectedCategoryProvider);
+
+    final headlines = ref.watch(headlinesProvider(selectedCategory));
 
     return headlines.when(
-      loading: () => const SliverToBoxAdapter(child: LoadingSkeleton()),
-      error: (error, _) => SliverFillRemaining(
-        hasScrollBody: false,
-        child: ErrorState(
-          error: error,
-          onRetry: () => ref.invalidate(headlinesProvider(category)),
-        ),
-      ),
+      loading: () {
+        debugPrint('[HOME] Berita sedang loading');
+
+        return const SliverToBoxAdapter(child: LoadingSkeleton());
+      },
+      error: (error, stack) {
+        debugPrint('[HOME] ERROR: $error');
+        debugPrint('$stack');
+
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: ErrorState(
+            error: error,
+            onRetry: () => ref.invalidate(headlinesProvider(selectedCategory)),
+          ),
+        );
+      },
       data: (articles) {
+        debugPrint('[HOME] Jumlah berita: ${articles.length}');
+
         if (articles.isEmpty) {
           return const SliverFillRemaining(
             hasScrollBody: false,
@@ -41,16 +53,37 @@ class HeadlinesSection extends ConsumerWidget {
           );
         }
 
-        return SliverPadding(
-          padding: const EdgeInsets.only(bottom: 16),
-          sliver: SliverList.separated(
-            itemCount: articles.length,
-            separatorBuilder: (_, _) =>
-                const Divider(indent: 16, endIndent: 16),
-            itemBuilder: (_, index) => index == 0
-                ? FeaturedArticleCard(article: articles.first)
-                : ArticleTile(article: articles[index]),
-          ),
+        return SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Trending Now!',
+                      style: Theme.of(context).textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'See All',
+                        style: TextStyle(color: Color(0xFF0015FF)),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            if (index == 1) {
+              return FeaturedArticleCard(article: articles.first);
+            }
+
+            return ArticleTile(article: articles[index - 1]);
+          }, childCount: articles.length + 1),
         );
       },
     );
