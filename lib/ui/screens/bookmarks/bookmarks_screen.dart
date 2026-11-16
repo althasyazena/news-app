@@ -51,7 +51,11 @@ class _BookmarksScreenState extends ConsumerState<BookmarksScreen> {
                     children: [
                       TextSpan(
                         text: 'S',
-                        style: TextStyle(color: Color(0xFFFFFF00)),
+                        style: TextStyle(
+                          color: theme.brightness == Brightness.dark
+                              ? Color(0xFFFFFF00)
+                              : Color(0xFFFFA500)
+                        ),
                       ),
                       TextSpan(
                         text: 'T',

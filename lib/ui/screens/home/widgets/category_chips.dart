@@ -11,12 +11,15 @@ class CategoryChips extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = ref.watch(SelectedCategoryProvider);
+    final theme = Theme.of(context);
 
     final categories = [
       (
         category: StemCategory.science,
         icon: Icons.science_outlined,
-        color: const Color(0xFFFFFF00),
+        color: theme.brightness == Brightness.dark
+          ? Color(0xFFFFFF00)
+          : Color(0xFFFFA500)
       ),
       (
         category: StemCategory.technology,

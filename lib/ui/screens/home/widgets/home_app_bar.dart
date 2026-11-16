@@ -33,7 +33,11 @@ class HomeAppBar extends ConsumerWidget {
               children: [
                 TextSpan(
                   text: 'S',
-                  style: TextStyle(color: Color(0xFFFFFF00)), // Yellow
+                  style: TextStyle(
+                    color: theme.brightness == Brightness.dark
+                        ? Color(0xFFFFFF00)
+                        : Color(0xFFFFA500)
+                  ),
                 ),
                 TextSpan(
                   text: 'T',

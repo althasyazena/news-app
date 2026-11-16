@@ -43,10 +43,12 @@ class DetailAppBar extends ConsumerWidget {
                             fontWeight: FontWeight.w800,
                           ),
                           children: [
-                            const TextSpan(
+                            TextSpan(
                               text: 'S',
                               style: TextStyle(
-                                color: Color(0xFFFFFF00),
+                                color: theme.brightness == Brightness.dark
+                                    ? Color(0xFFFFFF00)
+                                    : Color(0xFFFFA500)
                               ),
                             ),
                             const TextSpan(
